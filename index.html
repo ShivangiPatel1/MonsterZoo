@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<!--By Saeed Mirjalili-->
+<!--used for assignement by Shivangi Patel , Langara ID :100381086 -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Canvas: Monsters Zoo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/sstyle.css" rel="stylesheet" />
+    <!--external CSS-->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/drawingLibrary.js"></script>
+    <script src="js/characters.js"></script>
+    <script src="js/kinetic-sdk-1.0.1.min.js"> </script>
+
+</head>
+
+<body id="body" onload="setup()">
+
+    <div id="container">
+
+        <ul class="nav nav-pills">
+            <li>
+                <input type="button" id="startTracking" class="btn btn-success" value="Start Tracking"
+                    onclick="startTracking();">
+            </li>
+            <li>
+                <input style="display:none;" type="button" id="stopTracking" class="btn btn-danger"
+                    value="Stop Tracking" onclick="stopTracking();">
+            </li>
+        </ul>
+        <fieldset>
+            <legend id="PlayerTitle">Enter the name of player</legend>
+            <form class="form-horizontal" method="post" id="PlayerDetails" >
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <input autocomplete="off" type="text" name="name" class="form-control" id="playerName"
+                            placeholder="Enter Player name" required="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button type="submit" id="submit-button" class="btn btn-primary">Submit</button>
+                        <button type="button" id="cancel-button" class="btn btn-default">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+        <div id="trackarea">
+            <canvas id="drawingBox1" width="700" height="700" tabindex="1">
+                Your browser does not support HTML5 Canvas.
+            </canvas>
+
+            <table>
+                <tr>
+                    <td><button class="moveBtn" id='NW'>&nwArr;</button></td>
+                    <td><button class="moveBtn" id='N'>&uArr;</button></td>
+                    <td><button class="moveBtn" id='NE'>&neArr;</button></td>
+                </tr>
+                <tr>
+                    <td><button class="moveBtn" id='W'>&lArr;</button></td>
+                    <td><button class="moveBtn" id='C'>Reset</button></td>
+                    <td><button class="moveBtn" id='E'>&rArr;</button></td>
+                </tr>
+                <tr>
+                    <td><button class="moveBtn" id='SW'>&swArr;</button></td>
+                    <td><button class="moveBtn" id='S'>&dArr;</button></td>
+                    <td><button class="moveBtn" id='SE'>&seArr;</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script src="js/shapes.js"></script>
+</body>
+
+</html>
