@@ -1,5 +1,3 @@
-
-
 /*jshint esversion: 6 */
 
 // global variables
@@ -7,34 +5,39 @@
 let ctx, gameCharacter, myMaze;
 var kinetic;
 
-var config = {
-  scoreThreshold: 80,
-  loginThreshold: 80,
-  defaultPin: 1111,
-  disableChallenge: true
-}
-
-var options = {
-  logging: false,
-  trackingTimeSensitivity: 10,
-  mouseTrackingElement: '#trackarea',
-  debug: true,
-  autoTracking: false,
-  appKey: 'iGZmg1klKKbs8qd',
-  appSecret: 'Az7TVvYWxnORtwceKjZnBajAZBYpW5NK8ngksg7MvPKhsQtX1t2OtFKo3B8HLlhitQ==',
-  trackingInterval: 60,
-  sensorPollingFrequency: 10,
-  packageId: "sample.app.com",
-}
-
-
-
-
-
-function setup() {
+/**
+ *  Setting up the tracking data
+ */
+function SetupKineticTracker() {
   "use strict";
+  var config = {
+    scoreThreshold: 80,
+    loginThreshold: 80,
+    defaultPin: 1111,
+    disableChallenge: true,
+  };
+  
+  var options = {
+    logging: false,
+    trackingTimeSensitivity: 10,
+    mouseTrackingElement: "#trackarea",
+    debug: true,
+    autoTracking: false,
+    appKey: "dDqRXIOfv3xzAsy",
+    appSecret:
+      "Aj912UuwQ1R4qxihN9li6S8A0I/T1NpxRytoG70f6eTiczwVffFaZYItpBCkJHFvvQ==",
+    trackingInterval: 60,
+    sensorPollingFrequency: 10,
+    packageId: "monsterzoo.app.com",
+  };
   kinetic = new ZFS.KineticTracker(options);
   kinetic.init();
+}
+
+/**
+ *  Display Game board
+ */
+function DisplayGame() {
   const MAZE_ROWS = 10;
   const MAZE_COLS = 10;
 
@@ -72,6 +75,7 @@ function setup() {
 
   gameCharacter.drawOnCanvas(ctx);
 }
+
 function Maze() {
   this.mazeCellWidth = 0;
   this.maze = 0;
@@ -90,21 +94,7 @@ function Maze() {
       this.maze[i] = new Array(cols);
       this.maze[i].fill(0);
     }
-    /*
-    maze = [
-        [0, 0, 0, 0, 0, 0, 0, 1, 1, 0],
-        [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0]
-    ];
-    mazeExitBottom = 8;
-    */
+
     row = rows - 1;
     col = Math.floor(Math.random() * cols);
     this.mazeExitBottom = col;
@@ -321,7 +311,6 @@ function canvasKeyDown(e) {
       break;
   }
 
-  console.log(myMaze.currentMazeCellCol);
   if (
     (direction === "N" &&
       myMaze.maze[myMaze.currentMazeCellRow - 1][myMaze.currentMazeCellCol] ===
@@ -356,35 +345,112 @@ function canvasKeyDown(e) {
   }
 }
 
-$("#PlayerDetails").submit(function(e){
+$("#PlayerDetails").submit(function (e) {
   e.preventDefault();
   var playerName = document.getElementById("playerName").value;
   SavePlayer(playerName, function (error, response) {
     if (error) {
-        console.log(error);
-        alert(error);
-    } })
-})
+      alert(error);
+    }
+  });
+});
 
 
+/**
+ * Function to get/save player
+ * @param {*} playerName 
+ * @param {*} savePlayerCallback 
+ */
 function SavePlayer(playerName, savePlayerCallback) {
-  /// add SDK to call saving player
-
   var playerData = {
     name: playerName,
-    uCode:playerName,
+    uCode: playerName,
   };
   kinetic.getProfile(playerData, function (error, profileData) {
     if (error) {
-        
-        savePlayerCallback((error.data.errors[0].message));
+      savePlayerCallback(error.data.errors[0].message);
     } else {
-        localStorage.setItem("profileCode", profileData.data.profileCode);
-        localStorage.setItem("userName", playerName);
-      alert(`${playerName},You can Start Playing`)
-      document.getElementById("PlayerDetails").style.display='none';
-      document.getElementById("PlayerTitle").innerHTML=` Welcome ${playerName}`
-
+      localStorage.setItem("profileCode", profileData.data.profileCode);
+      localStorage.setItem("userName", playerName);
+      alert(`${playerName},You can Start Playing`);
+      document.getElementById("PlayerDetails").style.display = "none";
+      document.getElementById(
+        "PlayerTitle"
+      ).innerHTML = ` Welcome ${playerName}`;
+      DisplayGame();
     }
-})
+  });
+}
+
+/**
+ *  Start tracking the game board
+ */
+function StartTrackingGameBoard() {
+  kinetic.trackStart();
+  document.getElementById("startTracking").style.display = "none";
+  document.getElementById("stopTracking").style.display = "block";
+  var TrackingArea = document.getElementById("trackarea");
+  TrackingArea.classList.add("tracking");
+}
+
+/**
+ *  Stop tracking the game board and report the activities.
+ */
+function StopTrackingGameBoard() {
+  StopTrackingAndReportAction();
+  document.getElementById("stopTracking").style.display = "none";
+  document.getElementById("startTracking").style.display = "block";
+  var TrackingArea = document.getElementById("trackarea");
+  TrackingArea.classList.remove("tracking");
+}
+
+
+function StopTrackingAndReportAction() {
+  var profileCode = localStorage.getItem("profileCode");
+  kinetic.trackStop(function (trackData) {
+    var transRefId = makeTransRefId();
+    var body = {
+      gestureInfo: trackData,
+      profileCode: profileCode,
+      transRefId: transRefId,
+    };
+    
+    kinetic.checkGesture(body, function (error, gestureData) {
+      if (error) {
+        alert(JSON.stringify(error));
+      } else {
+        localStorage.setItem("transRefId", gestureData.refId);
+        localStorage.setItem("appRefId", gestureData.data.reqRefId);
+        reportAction("allow", gestureData, true);
+      }
+    });
+  });
+}
+
+function makeTransRefId() {
+  var text = "";
+  var possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-";
+
+  for (var i = 0; i < 37; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  return text;
+}
+
+function reportAction(action, checkResp, allowTransaction) {
+  var inputData = {
+    profileCode: localStorage.getItem("profileCode"),
+    action: action,
+    refId: checkResp.refId,
+    type: checkResp.data.type ? checkResp.data.type : "gesture",
+  };
+  kinetic.reportAction(inputData, function (error, outputData) {
+    if (error) {
+      console.log(JSON.stringify(error));
+    }
+
+    console.log("reportAction outputData: " + JSON.stringify(outputData));
+  });
 }

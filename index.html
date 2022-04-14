@@ -18,39 +18,40 @@
 
 </head>
 
-<body id="body" onload="setup()">
+<body id="body" onload="SetupKineticTracker()">
 
     <div id="container">
 
         <ul class="nav nav-pills">
             <li>
                 <input type="button" id="startTracking" class="btn btn-success" value="Start Tracking"
-                    onclick="startTracking();">
+                    onclick="StartTrackingGameBoard();">
             </li>
             <li>
                 <input style="display:none;" type="button" id="stopTracking" class="btn btn-danger"
-                    value="Stop Tracking" onclick="stopTracking();">
+                    value="Stop Tracking" onclick="StopTrackingGameBoard();">
             </li>
         </ul>
-        <fieldset>
-            <legend id="PlayerTitle">Enter the name of player</legend>
-            <form class="form-horizontal" method="post" id="PlayerDetails" >
-                <div class="form-group">
-                    <div class="col-sm-12">
-                        <input autocomplete="off" type="text" name="name" class="form-control" id="playerName"
-                            placeholder="Enter Player name" required="">
-                    </div>
+        <div class="PlayerForm">
+        <legend id="PlayerTitle">Enter the name of player</legend>
+        <form class="form-horizontal" method="post" id="PlayerDetails">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input autocomplete="off" type="text" name="name" class="form-control" id="playerName"
+                        placeholder="Enter Player name" required="">
                 </div>
-                <div class="form-group">
-                    <div class="col-sm-12">
-                        <button type="submit" id="submit-button" class="btn btn-primary">Submit</button>
-                        <button type="button" id="cancel-button" class="btn btn-default">Cancel</button>
-                    </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button type="submit" id="submit-button" class="btn btn-primary">Submit</button>
+                    <button type="button" id="cancel-button" class="btn btn-default">Cancel</button>
                 </div>
-            </form>
-        </fieldset>
+            </div>
+        </form>
+    </div>
+
         <div id="trackarea">
-            <canvas id="drawingBox1" width="700" height="700" tabindex="1">
+            <canvas id="drawingBox1" width="650" height="650" tabindex="1">
                 Your browser does not support HTML5 Canvas.
             </canvas>
 
@@ -73,7 +74,7 @@
             </table>
         </div>
     </div>
-    <script src="js/shapes.js"></script>
+    <script src="js/monster_zoo.js"></script>
 </body>
 
 </html>

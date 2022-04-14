@@ -47,3 +47,18 @@ table {
 td {
     padding: 7px;
 }
+.tracking{
+	border: 5px dashed #337AB7 !important;
+    padding: 1%;
+}
+
+.tracking:hover{
+	border: 5px dashed #337AB7 !important;
+}
+#PlayerTitle{
+    
+margin-top: 2%;
+}
+.PlayerForm{
+    max-width: fit-content;
+}
